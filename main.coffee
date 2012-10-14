@@ -1,0 +1,4 @@
+alert(UploadHandlerXHR.isSupported())
+
+
+
