@@ -1,5 +1,4 @@
-import window.Events
-;
+
 class window.FileUploader
   constructor: (options) ->
     @[prop] = val for prop, val of options
@@ -189,8 +188,7 @@ class UploadButton
       margin: 0,
       padding: 0,
       cursor: 'pointer',
-      opacity: 0,
-      cursor: 'pointer'
+      opacity: 0
     }
 
   #@element.appendChild(input)
