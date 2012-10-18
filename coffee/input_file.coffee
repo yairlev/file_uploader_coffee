@@ -1,0 +1,1 @@
+class InputFile extends FileBase
