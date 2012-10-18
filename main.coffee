@@ -1,4 +1,0 @@
-alert(UploadHandlerXHR.isSupported())
-
-
-

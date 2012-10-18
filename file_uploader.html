@@ -8,9 +8,25 @@
     <script type="text/javascript" src="lib/file_uploader.js"></script>
     <script type="text/javascript" src="lib/main.js"></script>
 
+
     <!--<script type="text/javascript" src="lib/require.js" data-main="lib/main.js"></script>-->
+    <script>
+
+
+        function alert() {
+            console.log('success');
+        }
+
+        $(function() {
+            var uploadButton = new UploadButton({parentElement: $('#test')[0], onChange: alert});
+            var input = uploadButton.get_input();
+        });
+
+    </script>
+
 </head>
 <body>
-
+    <a href="#" id="test">test</a>
+    <input id="test2" type="button" value="remove">
 </body>
 </html>

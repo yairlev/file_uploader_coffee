@@ -5,7 +5,7 @@ describe("CSS Helper", function() {
     beforeEach(function() {
         elem = document.createElement("input");
         elem.id = "test";
-        elem.className = "test hello";
+        elem.className = "coffee hello";
 
     });
 
@@ -34,7 +34,7 @@ describe("CSS Helper", function() {
                 opacity: 0.5
             },
             filters: ""
-        }
+        };
 
         CSS.add(elem, { opacity: 0.5 });
         expect(elem.style.opacity).toBe(0.5);
@@ -46,4 +46,26 @@ describe("CSS Helper", function() {
         expect(CSS.hasClass(elem, "hello")).toBeFalsy();
     });
 
+});
+
+
+
+describe("Event Helper", function() {
+
+    it("should attach a click event", function() {
+        var foo = {
+            testAlert: function(){}
+        };
+
+        spyOn(foo, 'testAlert');
+
+        var input = $('<input id="coffee" type="button" />');
+        $('body').append(input);
+
+        Events.attach(input[0], 'click', foo.testAlert);
+
+        $('#test').click();
+
+        expect(foo.testAlert).toHaveBeenCalled();
+    });
 });
