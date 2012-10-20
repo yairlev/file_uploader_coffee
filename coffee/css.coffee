@@ -4,8 +4,8 @@ class CSS
         if typeof element.style.opacity isnt "string" and element.filters?
           styles.filter = "alpha(opacity='#{Math.round(100 * styles.opacity)}')"
 
-  for key, value of styles
-    element.style[key] = value
+    for key, value of styles
+      element.style[key] = value
 
   @hasClass: (element, name) ->
     return new RegExp("(?:^|\\s)#{name}(?=\\s|$)").test(element.className)

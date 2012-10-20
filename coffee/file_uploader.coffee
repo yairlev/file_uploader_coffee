@@ -13,22 +13,27 @@ class FileUploader
   fileUploadHandler: null
   uploadButton: null,
   allowMultiple: false,
-  maxConcurrent: 1
+  maxConcurrent: 1,
+  callbacks: []
 
   constructor: (options) ->
     @[prop] = val for prop, val of options
 
     #Create appropriate file-upload handler
-    @fileUploadHandler = UploadHandlerXHR.isSupported ? new UploadHandlerXHR : new UploadHandlerForm
+    @fileUploadHandler = if UploadHandlerXHR.isSupported()
+      new UploadHandlerXHR()
+    else
+      new UploadHandlerForm()
 
     @set_parentElement @parentElement
 
   #input DOM change event filred
-  _onInputChange: (input) ->
+  _onInputChange: (input) =>
     #lets create a wrapper for the input
-    file = new XHRFile input if input?
-    @fileUploadHandler.add file
-
+    if input?
+      file = new XHRFile input
+      @fileUploadHandler.add file
+      Events.trigger(@, 'submit')
 
   upload: (fileId) ->
     @fileUploadHandler.upload fileId
@@ -39,7 +44,6 @@ class FileUploader
   cancel: (fileId) ->
     @fileUploadHandler.cancel fileId
 
-
   removeFile: (fileId) ->
     @fileUploadHandler.removeFile fileId
 
@@ -48,13 +52,16 @@ class FileUploader
 
   set_parentElement: (element) ->
     if element?
-      @uploadButton = new UploadButton(options.parentElement);
-      @uploadButton.onChange @_onInputChnage
+      @parentElement = element
+      @uploadButton = new UploadButton({parentElement: element});
+      @uploadButton.onChange = @_onInputChange
 
-  onSubmit: (id, file) ->
+
+  onSubmit: (callback) ->
+    Events.register(@, 'submit', callback);
+
   onComplete: (id, file, responseJSON) ->
   onCancel: (id, file) ->
-  onFileSelect: (file) ->
   onProgress: (file, loaded, total) ->
   onError: (file) ->
 

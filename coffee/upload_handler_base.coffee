@@ -7,7 +7,7 @@ class UploadHandlerBase
   protocol: 'POST'
   maxConnections: 999
   encoding: null
-  queue: []
+  files: {}
   params: {}
   customHeaders: []
 
@@ -17,6 +17,7 @@ class UploadHandlerBase
   onCancel: (file) ->
 
   add: (file) ->
+    @files[file.id] = file;
 
   _buildQueryString: (jsonObj) ->
 

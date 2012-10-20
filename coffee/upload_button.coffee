@@ -7,7 +7,7 @@ class UploadButton
   focusClass: null
   input: null
 
-  onChange: (input) =>
+  onChange: () ->
 
   constructor: (options) ->
     if not options? or not options.parentElement or not options.parentElement.nodeName
@@ -17,11 +17,11 @@ class UploadButton
 
     #make button suitable container for input
     CSS.add @parentElement, {
-    position: 'relative',
-    overflow: 'hidden',
-    #Make sure browse button is in the right side
-    #in Internet Explorer
-    direction: 'ltr'
+      position: 'relative',
+      overflow: 'hidden',
+      #Make sure browse button is in the right side
+      #in Internet Explorer
+      direction: 'ltr'
     }
 
     @createInput()
@@ -52,7 +52,8 @@ class UploadButton
 
     @parentElement.appendChild(input)
 
-    Events.attach input, "change", @onChange
+    Events.attach input, "change", () =>
+      @onChange input
 
     ### IE and Opera, unfortunately have 2 tab stops on file input
     which is unacceptable in our case, disable keyboard access ###

@@ -1,5 +1,4 @@
 class UploadHandlerXHR extends UploadHandlerBase
-  files: {}
   xhrs: {}
 
   @isSupported: () ->
