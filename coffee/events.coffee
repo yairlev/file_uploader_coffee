@@ -27,7 +27,8 @@ class Events
     if not @events[object][event]
       @events[object][event] = []
 
-    @events[object][event].push callback
+    if not @events[object][event][callback]
+      @events[object][event].push callback
 
   @unregister: (object, event, callback) ->
     if @events[object]?[event]?[callback]

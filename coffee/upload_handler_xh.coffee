@@ -7,6 +7,10 @@ class UploadHandlerXHR extends UploadHandlerBase
     xmlHttpRequest = new XMLHttpRequest()
     return input.multiple? && File? && FormData? && xmlHttpRequest? && xmlHttpRequest.upload?
 
+  add: (file) ->
+    @files[file.id] = file unless @files[file.id]?
+
+
   upload: (file) ->
     throw new Error() if file isnt XHRFile
     xhr = new XMLHttpRequest()
@@ -14,7 +18,8 @@ class UploadHandlerXHR extends UploadHandlerBase
     xhr.upload.onprogress = (e) =>
       if (e.lengthComputable)
         file.loaded = e.loaded
-        @onProgress(file)
+        file.total = e.total
+        @onProgress(file, e.loaded, e.total)
 
     xhr.onreadystatechange = =>
       if (xhr.readyState == 4)

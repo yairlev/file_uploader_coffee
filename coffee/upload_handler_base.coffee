@@ -5,11 +5,13 @@ class UploadHandlerBase
   debug: false
   action: '/server/upload'
   protocol: 'POST'
-  maxConnections: 999
+  maxConcurrent: 1
+  autoUpload: false
+  customHeaders: {}
   encoding: null
+  allowMultiple: false
   files: {}
   params: {}
-  customHeaders: []
 
   onStart: (file) ->
   onProgress: (file) ->

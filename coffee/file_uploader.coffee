@@ -1,19 +1,21 @@
 class FileUploader
 
   debug: false
-  action: '/server/upload'
+  action: '/server/upload',
+  protocol: 'POST',
+  autoUpload: true,
   parentElement: null
   params: {}
   customHeaders: {}
   button: null
-  sizeLimit: 0
-  minSizeLimit: 0
+  maxSize: 0
+  minSize: 0
   message: null
-  filesInProgress: 0,
+  filesInProgress: 0
   fileUploadHandler: null
-  uploadButton: null,
-  allowMultiple: false,
-  maxConcurrent: 1,
+  uploadButton: null
+  allowMultiple: false
+  maxConcurrent: 1
   callbacks: []
 
   constructor: (options) ->
@@ -21,9 +23,27 @@ class FileUploader
 
     #Create appropriate file-upload handler
     @fileUploadHandler = if UploadHandlerXHR.isSupported()
-      new UploadHandlerXHR()
+      new UploadHandlerXHR({
+        debug: @debug,
+        action: @action,
+        protocol: @protocol,
+        autoUpload: @autoUpload,
+        customHeaders: @customHeaders,
+        maxConcurrent: @maxConcurrent,
+        allowMultiple: @allowMultiple,
+        maxConcurrent: @maxConcurrent
+      })
     else
-      new UploadHandlerForm()
+      new UploadHandlerForm({
+        debug: debug,
+        action: @action,
+        protocol: @protocol,
+        autoUpload: @autoUpload,
+        customHeaders: @customHeaders,
+        maxConcurrent: @maxConcurrent,
+        allowMultiple: @allowMultiple,
+        maxConcurrent: @maxConcurrent
+        })
 
     @set_parentElement @parentElement
 
@@ -31,11 +51,12 @@ class FileUploader
   _onInputChange: (input) =>
     #lets create a wrapper for the input
     if input?
-      file = new XHRFile input
+      #create an appropriate file wrapper
+      file = if @fileUploadHandler is UploadHandlerXHR new XHRFile input else new InputFile input
       @fileUploadHandler.add file
-      Events.trigger(@, 'submit')
+      Events.trigger(@, 'submit', file)
 
-  upload: (fileId) ->
+  upload: (fileId, params) ->
     @fileUploadHandler.upload fileId
 
   uploadAll: () ->
@@ -56,14 +77,19 @@ class FileUploader
       @uploadButton = new UploadButton({parentElement: element});
       @uploadButton.onChange = @_onInputChange
 
-
-  onSubmit: (callback) ->
+  ###
+  Supported events: submit, beforeUpload, complete, error, progress, cancel
+  ###
+  on: (event, callback) ->
     Events.register(@, 'submit', callback);
 
-  onComplete: (id, file, responseJSON) ->
-  onCancel: (id, file) ->
-  onProgress: (file, loaded, total) ->
-  onError: (file) ->
+  #onSubmit: (callback) ->
+   # Events.register(@, 'submit', callback);
+
+  #onComplete: (id, file, responseJSON) ->
+  #onCancel: (id, file) ->
+  #onProgress: (file, loaded, total) ->
+  #onError: (file) ->
 
 
 
